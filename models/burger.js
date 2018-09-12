@@ -1,26 +1,32 @@
 var orm = require('../config/orm.js');
 
-// Import the ORM to create functions that will interact with the database.
-var orm = require("../config/orm.js");
+// THE MODEL HELPS US INTERFACE WITH THE DATABASE. 
+// THIS IS OUR API THAT IS CREATED BASED ON THE MYSQL DATABASE.
 
-var burgers = {
-  selectAll: function(cb) {
-    orm.all("burgers", function(res) {
-      cb(res);
-    });
-  },
-  // The variables cols and vals are arrays.
-  insertOne: function(burger, value, cb) {
-    orm.create("burgers", burger, value, function(res) {
-      cb(res);
-    });
-  },
-  updateOne: function(devoured, value, cb) {
-    orm.update("burgers", devoured, value, function(res) {
-      cb(res);
-    });
-  }
+var table = "burgers";
+
+var burger = {
+    //SELECTING ALL DATA FROM DATABASE
+    selectAll: function(cb) {
+        orm.selectAll(table, function(res) {
+            cb(res);
+        });
+    },
+    insertOne: function(columns, values, cb) {
+        orm.insertOne(table, columns, values, function(res) {
+            cb(res);
+        });
+    },
+    updateOne: function(objColVals, condition, cb) {
+        orm.updateOne(table, objColVals, condition, function(res) {
+            cb(res);
+        });
+    },
+    delete: function(condition, cb) {
+        orm.delete(table, condition, function(res) {
+            cb(res);
+        });
+    }
 };
 
-// Export the database functions for the controller (catsController.js).
-module.exports = burgers;
+module.exports = burger;

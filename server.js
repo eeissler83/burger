@@ -1,31 +1,32 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
-const app = express();
-var PORT = process.env.PORT || 8080;
+var express = require('express');
+var bodyParser = require('body-parser');
+var exphbs = require('express-handlebars');
+var app = express();
+var router = require('./controllers/burgers_controller.js')
 
-// Serve static content for the app from the "public" directory in the application directory.
-app.use(express.static("public"));
+// STATIC CONTENT
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(process.cwd() + '/public'));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 
-// parse application/json
-app.use(bodyParser.json());
+//SETTING HANDLEBARS
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 
-// Set Handlebars.
-var exphbs = require("express-handlebars");
+app.use('/', router);
 
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
+//SETTING SERVER
+var port = process.env.PORT || 8080;
+app.listen(port, function() {
+    console.log(`App listening on http://localhost:${port}`)
+})
 
-// Import routes and give the server access to them.
-// var routes = require("./controllers/catsController.js");
+// TEST CONNECTION RESPONSE
+app.get('/', function(req, res) {
+    res.send(`<h1>hello world</h1>`)
+})
 
-// app.use(routes);
-
-// Start our server so that it can begin listening to client requests.
-app.listen(PORT, function() {
-  // Log (server-side) when our server has started
-  console.log("Server listening on: http://localhost:" + PORT);
-});
+// TEST MYSQL
+var connection = require('./config/connection.js');
