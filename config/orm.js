@@ -29,7 +29,7 @@ var orm = {
         })
     },
 
-    create: function (table, columns, values, callback) {
+    insertOne: function (table, columns, values, callback) {
         var queryString = 'INSERT INTO ' + table;
 
         queryString += ' (';
